@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+cd $(dirname "$0")
+
+if [ "0" != "$(id -u)" ]; then
+  echo Must be a 'root' 1>&2
+  exit 1
+fi
+CONFIG_FILE=/usr/local/etc/xray/config.json
+
+function edit_time()
+{
+  echo $(stat --format=%Y ${CONFIG_FILE})
+}
+
+LAST_EDIT_TIME=$(edit_time)
+vim ${CONFIG_FILE}
+
+if [[ ${LAST_EDIT_TIME} -eq $(edit_time) ]]; then
+  exit 0
+fi
+systemctl restart xray
+journalctl -fu xray
