@@ -8,7 +8,7 @@ if [ "0" != "$(id -u)" ]; then
 fi
 CONFIG_FILE=/usr/local/etc/xray/config.json
 
-function edit_time()
+edit_time()
 {
   echo $(stat --format=%Y ${CONFIG_FILE})
 }
